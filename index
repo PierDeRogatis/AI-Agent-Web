@@ -70,7 +70,7 @@
         const modalContent = document.getElementById('modal-content');
         const closeModalBtn = document.getElementById('close-modal');
 
-        const apiKey = "AIzaSyBHLx-HpWOng68yOarMjujyhp6YpnTbVQY";
+        const apiKey = "";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
         // Show a custom modal message
