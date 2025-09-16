@@ -26,6 +26,10 @@
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">Generate Content</h2>
             <div class="space-y-4">
                 <div>
+                    <label for="api-key-input" class="block text-sm font-medium text-gray-700">Your Gemini API Key</label>
+                    <input type="text" id="api-key-input" placeholder="Paste your API key here..." required class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out">
+                </div>
+                <div>
                     <label for="topic-input" class="block text-sm font-medium text-gray-700">Topic</label>
                     <input type="text" id="topic-input" placeholder="e.g., The benefits of a digital detox" required class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out">
                 </div>
@@ -62,6 +66,7 @@
     <script>
         const generateBtn = document.getElementById('generate-btn');
         const topicInput = document.getElementById('topic-input');
+        const apiKeyInput = document.getElementById('api-key-input');
         const resultsContainer = document.getElementById('results-container');
         const loadingSpinner = document.getElementById('loading');
         const resultsContent = document.getElementById('results-content');
@@ -69,9 +74,6 @@
         const modalTitle = document.getElementById('modal-title');
         const modalContent = document.getElementById('modal-content');
         const closeModalBtn = document.getElementById('close-modal');
-
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
         // Show a custom modal message
         function showModal(title, message) {
@@ -104,6 +106,13 @@
 
         generateBtn.addEventListener('click', async () => {
             const topic = topicInput.value.trim();
+            const apiKey = apiKeyInput.value.trim();
+
+            if (!apiKey) {
+                showModal('API Key Required', 'Please enter your Gemini API key to proceed.');
+                return;
+            }
+
             if (!topic) {
                 showModal('Input Required', 'Please enter a topic to generate content.');
                 return;
@@ -113,6 +122,8 @@
             resultsContainer.classList.remove('hidden');
             resultsContent.innerHTML = '';
             loadingSpinner.classList.remove('hidden');
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             const payload = {
                 contents: [{ parts: [{ text: `Generate content for a viral social media video reel about "${topic}". The video must be a perfect, seamless loop in a 9:16 portrait format, no more than 8 seconds long. The final frame must be identical to the first. Optimize the prompt for an AI video generator and do not include any on-screen text or overlays. Also, provide a music suggestion (similar to a viral audio) and detailed social media descriptions for Instagram Reels, TikTok, and YouTube Shorts. The descriptions should be at least two paragraphs, with a strong hook, trending keywords, and a clear call to action. The output must be a single JSON object with the following structure:
